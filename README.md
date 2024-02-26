@@ -110,3 +110,27 @@ root.render(
   - client
   - errorTypes
   - styleNonce
+
+## 캐싱 라이프 사이클
+
+[Caching Examples | TanStack Query Docs](https://tanstack.com/query/latest/docs/framework/react/guides/caching)
+
+### 생명주기
+
+- Query Instance with and without cache data(캐시 데이터가 있거나 없는 쿼리 인스턴스)
+- Backgroud Refetching(백그라운드 리패칭)
+- Inactive Queries(비활성 쿼리)
+- Garbage Collection(가비지 컬렉션)
+
+### `gcTime` 의 기본값 5분, `staleTime` 기본값 0초를 가정
+
+- 새로운 인스턴스인 `useQuery({ queryKey: ['todos'], queryFn: fetchTodos })` 가 마운트될 때
+  - `['todos']` 쿼리 키 : 로딩 상태를 보여준 후 데이터를 가져오기 위해 네트워크 요청을 수행함
+  - 네트워크 요청이 완료되면 `['todos']` 에 반환된 데이터가 캐시됨
+  - 기본값 `0` 또는 즉시 상태로 `stableTime` 이 바뀌면서, `stale` 상태로 변경
+- `A` 라는 queryKey를 가진 A 쿼리 인스턴스가 `mount` 됨
+- 네트워크에서 데이터 fetch하고, 불러온 데이터는 A라는 queryKey로 `캐싱` 함
+- 이 데이터는 `fresh` 상태에서 `staleTime(기본값 0)` 이후 `stale` 상태로 변경됨
+- A 쿼리 인스턴스가 `unmount` 됨
+- 캐시는 `gcTime(기본값 5분)` 만큼 유지되다가 `가비지 콜렉터(GC)` 로 수집됨
+- 만일, gcTime 지나기 전이고, A 쿼리 인스턴스가 fresh한 상태라면 새롭게 mount 되고 캐시 데이터를 보여줌
