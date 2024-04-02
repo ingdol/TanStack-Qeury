@@ -31,5 +31,9 @@ export const useUserInfoData = (userId) => {
   return useQuery({
     queryKey: ['user-info', userId],
     queryFn: getUserInfo,
+    // gcTime: 5 * 60 * 1000, // 5분
+    // staleTime: 1 * 60 * 1000, // 1분
+    // refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 };
