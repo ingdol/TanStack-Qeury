@@ -15,8 +15,23 @@ export default function App() {
 }
 
 function Example() {
-  const { data } = useUserInfoData(1);
-  return <div>{data?.id}</div>;
+  const { data, isLoading, isError, error } = useUserInfoData(1);
+
+  if (isLoading) {
+    return <h2>로딩 중 ...</h2>;
+  }
+
+  if (isError) {
+    return <h2 style={{ color: 'red' }}>{error.message}</h2>;
+  }
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <p>ID : {data?.id}</p>
+      <p>name : {data?.name}</p>
+      <p>username : {data?.username}</p>
+    </div>
+  );
 }
 
 export const getUserInfo = async ({ queryKey }) => {
@@ -31,9 +46,5 @@ export const useUserInfoData = (userId) => {
   return useQuery({
     queryKey: ['user-info', userId],
     queryFn: getUserInfo,
-    // gcTime: 5 * 60 * 1000, // 5분
-    // staleTime: 1 * 60 * 1000, // 1분
-    // refetchOnMount: true,
-    refetchOnWindowFocus: false,
   });
 };
