@@ -1,50 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import axios from 'axios';
-
-const queryClient = new QueryClient();
+import { Header } from './Header';
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <Example />
-    </QueryClientProvider>
-  );
-}
-
-function Example() {
-  const { data, isLoading, isError, error } = useUserInfoData(1);
-
-  if (isLoading) {
-    return <h2>로딩 중 ...</h2>;
-  }
-
-  if (isError) {
-    return <h2 style={{ color: 'red' }}>{error.message}</h2>;
-  }
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <p>ID : {data?.id}</p>
-      <p>name : {data?.name}</p>
-      <p>username : {data?.username}</p>
+    <div>
+      <Header />
+      <h1>Home</h1>
     </div>
   );
 }
-
-export const getUserInfo = async ({ queryKey }) => {
-  const userId = queryKey[1];
-  const response = await axios.get(
-    `https://jsonplaceholder.typicode.com/users/${userId}`
-  );
-  return response?.data;
-};
-
-export const useUserInfoData = (userId) => {
-  return useQuery({
-    queryKey: ['user-info', userId],
-    queryFn: getUserInfo,
-  });
-};
