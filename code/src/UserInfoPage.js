@@ -43,5 +43,9 @@ export const useUserInfoData = (userId) => {
   return useQuery({
     queryKey: ['user-info', userId],
     queryFn: getUserInfo,
+    // staleTime: 30000,
+    // refetchOnMount: false,
+    // refetchInterval: 2000,
+    // refetchIntervalInBackground: true,
   });
 };

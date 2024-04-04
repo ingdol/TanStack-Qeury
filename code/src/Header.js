@@ -5,9 +5,9 @@ export const Header = () => {
     <ul>
       <li>
         <Link to="/">Home</Link>
-        <li>
-          <Link to="/userInfo">User Info</Link>
-        </li>
+      </li>
+      <li>
+        <Link to="/userInfo">User Info</Link>
       </li>
     </ul>
   );
