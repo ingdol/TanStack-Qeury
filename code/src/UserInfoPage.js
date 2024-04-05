@@ -3,7 +3,13 @@ import axios from 'axios';
 import { Header } from './Header';
 
 export const UserInfoPage = () => {
-  const { data, isLoading, isFetching, isError, error } = useUserInfoData(1);
+  const { data, isError, error } = useUserInfoData(1);
+
+  const { refetch, isLoading, isFetching } = useQuery({
+    queryKey: ['user-info-2', 2],
+    queryFn: getUserInfo,
+    enabled: false,
+  });
 
   console.log({ isLoading, isFetching });
 
@@ -15,6 +21,9 @@ export const UserInfoPage = () => {
     return <h2>서버 요청 중 ...</h2>;
   }
 
+  // if (isLoading || isFetching) {
+  //   return <h2>로딩중...2</h2>;
+  // }
   if (isError) {
     return <h2 style={{ color: 'red' }}>{error.message}</h2>;
   }
@@ -27,6 +36,7 @@ export const UserInfoPage = () => {
         <p>name : {data?.name}</p>
         <p>username : {data?.username}</p>
       </div>
+      <button onClick={refetch}>Click this button</button>
     </>
   );
 };
