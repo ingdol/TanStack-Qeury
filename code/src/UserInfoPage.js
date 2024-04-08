@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Header } from './Header';
+import useUserInfoList from './useUserInfoList';
 
 export const UserInfoPage = () => {
   // const { data, isError, error } = useUserInfoData(1);
@@ -23,7 +24,7 @@ export const UserInfoPage = () => {
   //   },
   // });
 
-  const { refetch, data, isLoading, isFetching } = useUserInfoData();
+  const { refetch, data, isLoading, isFetching } = useUserInfoList();
   console.log(data);
 
   console.log({ isLoading, isFetching });

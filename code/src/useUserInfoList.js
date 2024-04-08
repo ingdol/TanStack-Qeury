@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-function useUserInfoData() {
+function useUserInfoList() {
   const { refetch, data, isLoading, isFetching } = useQuery({
     queryKey: ['user-list'],
     queryFn: () => {
@@ -17,4 +17,4 @@ function useUserInfoData() {
   return { refetch, data, isLoading, isFetching };
 }
 
-export default useUserInfoData;
+export default useUserInfoList;
