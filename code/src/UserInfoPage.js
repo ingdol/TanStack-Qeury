@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Header } from './Header';
 import useUserInfoList from './useUserInfoList';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const UserInfoPage = () => {
   // const { data, isError, error } = useUserInfoData(1);
@@ -53,7 +54,9 @@ export const UserInfoPage = () => {
         <p>name : {data?.name}</p>
         <p>username : {data?.username}</p> */}
         {data?.map((user) => (
-          <p>{user.name}</p>
+          <Link key={user.id} to={`/userInfo/${user.id}`}>
+            {user.name} {user.id}
+          </Link>
         ))}
       </div>
       <button onClick={refetch}>Click this button</button>

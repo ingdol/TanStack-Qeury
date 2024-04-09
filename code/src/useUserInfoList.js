@@ -10,6 +10,7 @@ function useUserInfoList() {
     select: (data) => {
       return data.data.map((user) => ({
         name: user.name,
+        id: user.id,
       }));
     },
   });
