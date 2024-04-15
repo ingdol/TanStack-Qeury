@@ -1,16 +1,23 @@
 import { Header } from './Header';
-import useState from './useState';
+import React from './useState';
 
 export default function App() {
-  const [count, setCount] = useState(1);
-  console.log('count: ', count);
-  setCount(2);
-  console.log('count: ', count);
+  function Component() {
+    const [count, setCount] = React.useState(1);
+    return {
+      render: () => console.log(count),
+      click: () => setCount(count + 1),
+    };
+  }
+
+  const Test = React.render(Component);
+  Test.click();
+  const Test2 = React.render(Component);
 
   return (
     <div>
       <Header />
-      <h1>Home</h1>
+      {/* <h1>Home</h1> */}
     </div>
   );
 }
