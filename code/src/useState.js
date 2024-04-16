@@ -1,13 +1,16 @@
 const React = (() => {
-  let _val;
+  let hooks = [];
+  let idx = 0;
   function useState(init) {
     // 만약 _val 값이 없으면 init을 넣어준다.
     // 가장 초기화할 때 _val 값이 없으니 init을 넣어준다.
-    const state = _val || init;
+    let state = hooks[idx] || init;
     const setState = (newVal) => {
-      _val = newVal;
+      hooks[idx] = newVal;
     };
-
+    idx++;
+    console.log('state : ', state);
+    console.log('hooks : ', hooks);
     return [state, setState];
   }
 
