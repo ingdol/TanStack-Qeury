@@ -244,11 +244,21 @@ const React = (() => {
   function useState(init) {
     // 만약 _val 값이 없으면 init을 넣어준다.
     // 가장 초기화할 때 _val 값이 없으니 init을 넣어준다.
+    console.log('<useState 함수 시작>');
+    console.log('init : ', init);
+    console.log('hooks[idx] : ', hooks[idx]);
     let state = hooks[idx] || init;
+    console.log('idx 증가하기 전 idx 값 : ', idx);
     const setState = (newVal) => {
+      console.log('--- setState 함수 시작 ---');
+      console.log('새로 들어온 newVal : ', newVal);
       hooks[idx] = newVal;
+      console.log('setState된 후에 hooks : ', hooks);
+      console.log('--- setState 함수 끝 ---');
     };
     idx++;
+    console.log('idx 증가하고 나서 idx 값 : ', idx);
+    console.log('최종 state : ', state);
     return [state, setState];
   }
 
@@ -293,17 +303,240 @@ const Test3 = React.render(Component); // { count: 'Orange', text: 'Apple'}
 
 1. `Component` 최초 호출
    1. 내부의 `useState(1)` 호출
+
+      - `const [count, setCount] = React.useState(1);`
+
    2. `state` 값은 `hooks[idx]` 값이 `undefined` 이므로 `init` 값이 들어가 `state` 는 `1` 이 된다.
-   3. `idx++` 는 기존의 `idx === 0` 값에서 `1` 로 증가한다.
-   4. 두 번째 `useState('Apple')` 가 호출된다.
-   5. `hooks[idx](idx === 1)` 값이 `undefined` 이므로 init 값인 `'Apple'` 이 들어간다.
-   6. 이후 `idx` 는 `2` 로 증가한다.
+
+      - `let state = hooks[idx] || init;`
 
       ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%202.png)
+
+   3. `idx++` 는 기존의 `idx === 0` 값에서 `1` 로 증가한다.
+
+      - `let idx = 0;`
+
+      - `idx++;`
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%203.png)
+
+   4. 두 번째 `useState('Apple')` 가 호출된다.
+
+      - `const [text, setText] = React.useState('Apple');`
+
+   5. `hooks[idx](idx === 1)` 값이 `undefined` 이므로 init 값인 `'Apple'` 이 들어간다.
+
+      - `let state = hooks[idx] || init;`
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%204.png)
+
+   6. 이후 `idx` 는 `2` 로 증가한다.
+
+      - `let idx = 0;`
+
+      - `idx++;`
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%205.png)
 2. `Test.click` 호출
    1. `setCount(count + 1)` 이 호출된다.
+
+      - `Test.click();`
+
+      - `click: () => setCount(count + 1)`
+
    2. 현재 `idx === 2` 이므로 `hooks[2] = 2` 값이 된다.
+
+      ```
+      const setState = (newVal) => {
+            hooks[idx] = newVal;
+          };
+      ```
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%206.png)
 3. `Component` 두 번째 호출
    1. click 이벤트 핸들러로 인해 함수형 컴포넌트인 `Component` 는 두 번째 호출이 된다.
    2. `Component` 의 로직이 다시 실행돼서 `useState(1)`이 호출된다.
-   3. `useState` 호출 로직 내부에 `let state = hooks[idx] || init;` 가 있는데 현재 `idx === 2` 이므로
+   3. `useState` 호출 로직 내부에 `let state = hooks[idx] || init;` 가 있는데 현재 `idx === 2` 이므로 `hooks[2]` 값은 `2` 이다. 따라서 `state` 값은 `2` 가 된다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%207.png)
+
+   4. 이후 `idx++` 이므로 `idx` 값은 `3` 으로 증가한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%208.png)
+
+   5. 두 번째 `useState('Apple')` 이 호출된다.
+   6. 현재 `idx === 3` 이므로 `hooks[3]` 값은 `undefined` 이다. 따라서 `state` 값은 `init` 인 `'Apple'` 가 들어간다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%209.png)
+
+   7. 이후 `idx++` 로 인해 `idx` 값은 `4` 로 증가한다.
+   8. 현재까지 `state = { count : 2, text : Apple }`
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2010.png)
+4. `Test2.type` 호출
+   1. `setText('Orange')` 가 호출된다.
+
+      - `Test2.type('Orange');`
+
+   2. 현재 `idx === 4` 이므로 `hooks[4]` 는 `'Orange'` 가 들어가게 된다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2011.png)
+5. `Component` 세 번째 호출
+   1. `type` 이벤트 핸들러로 인해 함수형 컴포넌트인 `Component` 는 세 번째 호출이 된다.
+   2. `Component` 의 로직이 다시 실행돼서 `useState(1)` 이 호출된다.
+   3. `useState` 호출 로직 내부에 현재 `idx === 4` 이므로 `hooks[4]` 값은 `Orange` 이다. `state` 값은 `Orange` 이다.
+   4. 이후 `idx++` 이므로 `idx` 값은 `5` 로 증가한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2012.png)
+
+   5. 두 번째 `useState('Apple')` 호출된다.
+   6. 현재 `idx === 5` 이므로 `hooks[5]` 값은 `undefined` 이다. 따라서 `state` 값은 `init` 인 `'Apple'` 가 들어간다.
+   7. 이후 `idx++` 로 인해 `idx` 값은 `6` 으로 증가한다.
+   8. 현재까지 `state = { count : 'Orange', text : 'Apple'}`
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2013.png)
+
+### 지금까지의 로직에서
+
+- `useState` 가 여러 개일 때, 컴포넌트의 첫 번째로 호출되는 `useState` 종류와 호출된 `setState` 의 종류가 일치하지 않으면 값이 `setState` 값으로 덮어진다는 점이다.
+- 그렇다고 항상 `Component` 의 첫 번째 `useState(예제에서는 count state)` 인 `setState` 만 호출할 수도 없다.
+- 다른 `useState`의 `setState` 도 호출하는 이벤트도 있기 때문이다.
+
+# 각 useState마다 state를 저장할 index를 지정
+
+- 매번 hooks 배열의 다른 index에 state를 저장하면서 마지막 index에 위치한 state 값을 참조한 방법은 단점이 컸다.
+- 따라서 각각 useState마다 배열에 저장할 state의 고유 index를 지정하면 된다.
+
+```jsx
+const React = (() => {
+  let hooks = [];
+  let idx = 0;
+  function useState(init) {
+    // 만약 _val 값이 없으면 init을 넣어준다.
+    // 가장 초기화할 때 _val 값이 없으니 init을 넣어준다.
+    console.log('<useState 함수 시작>');
+    console.log('init : ', init);
+    console.log(`hooks[${idx}] : `, hooks[idx]);
+    let state = hooks[idx] || init;
+    let _idx = idx;
+    console.log('idx 증가하기 전 _idx 값 : ', _idx);
+    const setState = (newVal) => {
+      console.log('--- setState 함수 시작 ---');
+      console.log('새로 들어온 newVal : ', newVal);
+      console.log('현재 _idx 값 : ', _idx);
+      hooks[_idx] = newVal;
+      console.log('setState된 후에 hooks : ', hooks);
+      console.log('--- setState 함수 끝 ---');
+    };
+    idx++;
+    console.log('idx 증가하고 나서 idx 값 : ', idx);
+    console.log('최종 state : ', state);
+    return [state, setState];
+  }
+
+  function render(Component) {
+    // render가 호출되면 idx 값을 0으로 초기화 한다.
+    idx = 0;
+    const C = Component();
+
+    // 단순하게 state 값이 디버그 콘솔에 보이게 한다.
+    C.render();
+
+    return C;
+  }
+
+  return { useState, render };
+})();
+
+function Component() {
+  const [count, setCount] = React.useState(1);
+  const [text, setText] = React.useState('Apple');
+
+  return {
+    render: () => console.log({ count, text }),
+    click: () => setCount(count + 1),
+    type: (nextText) => setText(nextText),
+  };
+}
+
+const Test = React.render(Component); // { count: 1, text: 'Apple'}
+Test.click();
+const Test2 = React.render(Component); // { count: 2, text: 'Apple'}
+Test2.type('Orange');
+const Test3 = React.render(Component); // { count: 2, text: 'Orange'}
+```
+
+### 예제 코드 동작 프로세스
+
+1. 최초 Component 호출
+   1. `useState(1)` 을 호출한다.
+   2. `idx` 가 `0` 이고 `hooks[idx]` 값은 비어있으므로 `state` 는 `init` 값인 `1` 이 된다.
+   3. `_idx` 변수에 현재 `idx` 를 저장한다.
+   4. `idx` 의 값을 `1` 만큼 증가시킨다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2014.png)
+
+   5. `useState('Apple')` 을 호출한다.
+   6. `idx` 가 `1` 이고 `hooks[idx]` 값은 비어있으므로 `state` 는 `init` 값인 `Apple` 이 된다.
+   7. `_idx` 변수에 현재 `idx` 를 저장한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2015.png)
+2. `Test.click()` 호출
+   1. `setCount(count + 1)` 이 호출된다.
+   2. `setCount` 함수가 정의되었을 시점에 상위 스코프의 `idx` 의 값은 `0` 이였다. 따라서 `_idx` 도 `0` 이였고 `setCount` 가 클로저로 반환되고 이때 `_idx` 값은 자유변수로 해당 시점에 호출된 `useState` 의 `_idx` 값을 가지고 있다. 따라서 `hooks[0]` 값에 `2` 를 할당한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2016.png)
+3. 두 번째 Component 호출
+   1. `React.render` 가 호출되면 `idx` 값을 `0` 으로 초기화한다. 그 이유는 `useState` 의 `state` 가 저장되는 위치를 순서대로 하기 위함이다.(useState의 순서라고 생각하면 쉽다.)
+   2. `useState(1)` 을 호출한다.
+   3. `idx` 가 `0` 이고 `hooks[0]` 값은 `2`였으므로 `state` 는 `2` 가 된다.
+   4. `_idx` 변수에 현재 `idx` 를 저장한다.
+   5. `idx` 의 값을 `1` 증가시킨다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2017.png)
+
+   6. `useState('Apple')` 을 호출한다.
+   7. `idx` 가 `1` 이고 `hooks[1]` 값은 `'Apple'` 이였으므로 `state` 는 `'Apple'` 이 된다.
+   8. `_idx` 변수에 현재 `idx` 를 저장한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2018.png)
+4. `Test2.type` 호출
+   1. `setText('Orange')` 가 호출된다.
+   2. `setText` 함수가 정의되었을 시점에 상위 스코프의 `idx` 의 값은 `1` 이였다. 따라서 `_idx` 도 `1` 이였고 `setText` 가 클로저로 반환되고 이때 `_idx` 값은 자유변수로 해당 시점에 호출된 `useState` 의 `_idx` 값을 가지고 있다. 따라서 `hooks[1]` 값에 `'Orange'` 를 할당한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2019.png)
+5. 세 번째 Component 호출
+   1. `React.render` 가 호출되면 `idx` 값을 `0` 으로 초기화한다.
+   2. `useState(1)` 을 호출한다.
+   3. `idx` 가 `0` 이고 `hooks[0]` 값은 `2` 였으므로 `state` 는 `2` 가 된다.
+   4. `_idx` 변수에 현재 `idx` 를 저장한다.
+   5. `idx` 의 값을 `1` 증가시킨다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2020.png)
+
+   6. `useState('Apple')` 을 호출한다.
+   7. `idx` 가 `1` 이고 `hooks[1]` 값은 `'Orange'` 이였으므로 `state` 는 `'Orange'` 가 된다.
+   8. `_idx` 변수에 현재 `idx` 를 저장한다.
+
+      ![Untitled](Vanila%20Javascript%20useState%20eb2e6ae31a3146a6a06d1daf91f3870d/Untitled%2021.png)
+
+- 현재 useState가 호출된 순서에 따라서 index 위치가 정해지고 있다.
+- 따라서 useState가 조건문 또는 반복문에 따라서 호출 유무에 따라 결정하면 state가 저장된 배열(React 함수의 hooks 변수)의 index의 값을 불러오거나 저장할 수 없을 것이다.
+
+### 최상위(at the Top Level)에서만 Hook을 호출해야 한다.
+
+- 실제 공식 홈페이지에서도 다음과 같은 내용을 담고 있다.
+
+[Hook의 규칙 – React](https://ko.legacy.reactjs.org/docs/hooks-rules.html)
+
+- 반복문, 조건문 혹은 중첩된 함수 내에서 Hook을 호출하면 안된다.
+- 대신 early return이 실행되기 전에 항상 React 함수의 최상위에서 Hook을 호출해야 한다.
+  - 이 규칙으로, 컴포넌트가 렌더링될 때마다 항상 동일한 순서로 Hook이 호출되는 것이 보장된다.
+- 이러한 점은 React가 `useState` 와 `useEffect` 가 여러 번 호출되는 중에 Hook의 상태를 올바르게 유지할 수 있도록 해준다.
+
+# 정리
+
+- 각각 useState 별로 state를 저장할 고유의 index 위치를 만든다.
+- 최초의 index는 Component에서 정의된 useState에서 시작해서 다른 useState가 호출될 때마다 증가한다.
+
+- 실제 useState는 React에 따르면 최적화를 위해서 가장 마지막에 비동기로 실행된다고 한다.
